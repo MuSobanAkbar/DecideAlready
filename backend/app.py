@@ -9,6 +9,7 @@ load_dotenv()
 
 app = FastAPI()
 
+# stops CORS errors when making requests from the frontend to the backend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  
@@ -40,13 +41,13 @@ def get_random_movie():
     response = requests.get(url,params=params)
 
     if response.status_code == 200:
-        data = response.json()  # Converts the raw text into a Python dictionary
+        data = response.json()  
         movie_list = data.get("results", [])
 
     if movie_list:
         movie = random.choice(movie_list)  # pick random movie from list
 
-        print(f"Title: {movie['title']}")
+        return {"title": movie.get("title")}
 
     else:
         print(f"Error fetching data: {response.status_code}")
