@@ -3,6 +3,7 @@ import random
 import requests
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -51,3 +52,6 @@ def get_random_movie():
 
     else:
         print(f"Error fetching data: {response.status_code}")
+
+if os.path.exists("frontend/dist"):
+  app.mount("/", StaticFiles(directory="frontend/dist", html=True), name="static")
