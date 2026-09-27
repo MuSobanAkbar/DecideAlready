@@ -50,6 +50,7 @@ export default function App() {
       </button>
  
       {movieTitle && <h2 style={{ marginTop: "30px" }}>{movieTitle}</h2>}
+      {movieOverview && <p style={{ maxWidth: "600px", margin: "20px auto" }}>{movieOverview}</p>}
     </div>
   );
 }
