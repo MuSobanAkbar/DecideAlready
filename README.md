@@ -24,7 +24,7 @@ The backend picks a random page (1–500) from TMDB's `/discover/movie` endpoint
 | Frontend | React + TypeScript (Vite) |
 | Backend | Python + FastAPI |
 | Container | Docker (multi-stage: Node builds → Python runtime) |
-| CI | GitHub Actions — builds the image on every push |
+| CI | GitHub Actions|
 | Hosting | Render |
 
 
