@@ -17,7 +17,7 @@ export default function App() {
  
     try {
 
-      const response = await fetch("http://localhost:8000/api/random");
+      const response = await fetch("api/random");
  
 
       const data: MovieResponse = await response.json();
