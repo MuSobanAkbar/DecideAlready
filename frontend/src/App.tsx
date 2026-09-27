@@ -4,11 +4,13 @@ import { useState } from 'react'
 interface MovieResponse
 {
     title: string;
+    overview: string;
 }
 
 export default function App() {
 
   const [movieTitle, setMovieTitle] = useState("");
+  const [movieOverview, setMovieOverview] = useState("");
   const [isLoading, setIsLoading] = useState(false);
  
 
@@ -24,6 +26,7 @@ export default function App() {
  
 
       setMovieTitle(data.title);
+      setMovieOverview(data.overview);
     } catch (error) {
       console.error("Failed to fetch movie:", error);
       setMovieTitle("Failed to load movie. Is the backend running?");

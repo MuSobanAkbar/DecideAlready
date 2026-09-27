@@ -47,8 +47,11 @@ def get_random_movie():
 
     if movie_list:
         movie = random.choice(movie_list)  # pick random movie from list
+        selected_movie_id = movie.get("id")
 
-        return {"title": movie.get("title")}
+
+        
+        return {"title": movie.get("title"), "description": movie.get("overview")}
 
     else:
         print(f"Error fetching data: {response.status_code}")
