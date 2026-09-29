@@ -25,6 +25,11 @@ API_KEY = os.getenv("TMDB_API_KEY")
 if not API_KEY:
     raise ValueError("TMDB_API_KEY is not set in the environment variables, please set it in the .env file.")
 
+
+@app.get("/api/health")
+def health_check():
+    return {"status":"ok"}
+
 # out of the 500 pages, select a random one
 @app.get("/api/random")
 def get_random_movie():
