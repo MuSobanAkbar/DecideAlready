@@ -32,5 +32,6 @@ The backend picks a random page (1–500) from TMDB's `/discover/movie` endpoint
 
 Film data from [TMDB](https://www.themoviedb.org/). This product uses the TMDB API but is not endorsed or certified by TMDB.
 
-# To add/change for V2
-[] 
+# Additions
+- Added Health API check 
+- Added pytests incase tmdb site is down, and we need to check api calls. (done using magic mock which allows to shape shift as an object)
