@@ -1,11 +1,11 @@
 import os
-import random 
+import random
+
 import requests
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from dotenv import load_dotenv
-
 
 load_dotenv()
 
@@ -53,7 +53,7 @@ def get_random_movie():
 
     if movie_list:
         movie = random.choice(movie_list)  # pick random movie from list
-        selected_movie_id = movie.get("id")
+
 
 
         
