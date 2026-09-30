@@ -21,6 +21,7 @@ jobs:
           ruff check backend/
       
       - name: Frontend Tests
+        working-directory: ./frontend
         run: |
           npm ci 
           npx tsc --noEmit
