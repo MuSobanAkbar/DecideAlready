@@ -13,6 +13,19 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
+      
+      - name: Check Python with ruff
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install ruff
+          ruff check backend/
+      
+      - name: Frontend Tests
+        run: |
+          npm ci 
+          npx tsc --noEmit
+          npm run lint
+      
 
       - name: Test Docker Build
         run: docker build -t movie-picker .
