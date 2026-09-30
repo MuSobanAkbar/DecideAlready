@@ -52,10 +52,10 @@ def get_random_movie():
         movie_list = data.get("results", [])
 
     if movie_list:
-        movie = random.choice(movie_list)  # pick random movie from list
+        movie = random.choice(movie_list)  # pick random movie from list.
 
 
-
+     
         
         return {"title": movie.get("title"), "overview": movie.get("overview"), "date": movie.get("release_date") or "Unknown"}
 
