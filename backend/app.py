@@ -57,7 +57,7 @@ def get_random_movie():
 
 
         
-        return {"title": movie.get("title"), "overview": movie.get("overview"), "date": movie.get("release_date" or "Unknown")}
+        return {"title": movie.get("title"), "overview": movie.get("overview"), "date": movie.get("release_date") or "Unknown"}
 
     else:
         print(f"Error fetching data: {response.status_code}")
