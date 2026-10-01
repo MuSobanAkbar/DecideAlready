@@ -22,10 +22,8 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
-    /* Path Aliasing without baseUrl */
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    /* Path aliasing */
+    "paths": { "@/*": ["./src/*"] }
   },
   "include": ["src"]
 }
