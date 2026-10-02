@@ -1,16 +1,25 @@
 import { useState } from 'react'
-
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 interface MovieResponse
 {
     title: string;
     overview: string;
     date: string;
+    poster_path: string;
 }
 
 export default function App() {
 
   const [movieTitle, setMovieTitle] = useState("");
+  const [moviePosterPath, setMoviePosterPath] = useState("");
   const [movieOverview, setMovieOverview] = useState("");
   const [movieDate, setMovieDate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -30,6 +39,7 @@ export default function App() {
       setMovieTitle(data.title);
       setMovieOverview(data.overview);
       setMovieDate(data.date);
+      setMoviePosterPath(data.poster_path);
     } catch (error) {
       console.error("Failed to fetch movie:", error);
       setMovieTitle("Failed to load movie. Is the backend running?");
