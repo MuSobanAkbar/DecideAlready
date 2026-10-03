@@ -53,11 +53,11 @@ def get_random_movie():
 
     if movie_list:
         movie = random.choice(movie_list)  # pick random movie from list.
-
+        movie.get("poster_path")  # get poster path to display in frontend
 
      
         
-        return {"title": movie.get("title"), "overview": movie.get("overview"), "date": movie.get("release_date") or "Unknown"}
+        return {"title": movie.get("title"), "overview": movie.get("overview"), "date": movie.get("release_date") or "Unknown", "poster_path": movie.get("poster_path") or "Unknown"}
 
     else:
         print(f"Error fetching data: {response.status_code}")
