@@ -43,6 +43,7 @@ export default function App() {
       setMovie(data);
     } catch (error) {
       console.error("Failed to fetch movie:", error);
+      setError("Failed to fetch movie. Please try again.");
 
     } finally {
       setIsLoading(false);
