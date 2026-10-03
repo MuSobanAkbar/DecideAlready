@@ -2,11 +2,16 @@ import { useState } from 'react'
 import { Button } from "@/components/ui/button";
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Shuffle } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
+import { Badge } from "@/components/ui/badge";
+import { ImageOff } from "lucide-react";
 
 interface MovieResponse
 {
@@ -44,29 +49,46 @@ export default function App() {
  
 
   return (
-    <div style={{ textAlign: "center", marginTop: "50px", fontFamily: "sans-serif " }}>
-      <h1>Random Movie Picker</h1>
+    <main className="flex min-h-svh flex-col items-center gap-8 px-4 py-12">
+      <header className="flex flex-col items-center gap-2 text-center">
+  <h1 className="text-4xl font-bold tracking-tight">DecideAlready</h1>
+  <p className="text-muted-foreground">You can't pick a film? Let the button decide.</p>
+</header>
  
 
-      <button
-        onClick={fetchRandomMovie}
-        disabled={isLoading}
-        style={{ padding: "10px 20px", fontSize: "16px", cursor: "pointer" }}
-      >
-        {isLoading ? "Picking..." : "Get Random Movie"}
-      </button>
+      <Button size="lg" onClick={fetchRandomMovie} disabled={isLoading}>
+        {isLoading ? <Spinner data-icon="inline-start" /> : <Shuffle data-icon="inline-start" />}
+        {isLoading ? "Picking..." : "Pick a film"}
+      </Button>
       {movie && (
-        <>
-          <h2 style={{ marginTop: "30px" }}>{movie.title}</h2>
-          <p style={{ maxWidth: "600px", margin: "20px auto" }}>{movie.overview}</p>
-          <p>Release Date: {movie.date}</p>
-          <img
-            src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : ""}
-            alt={movie.title}
-            style={{ maxWidth: "300px", marginTop: "20px" }}
-          />
-        </>
-      )}
+<Card className="w-full max-w-sm">
+  {movie.poster_path ? (
+    <img
+      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+      alt={`Poster for ${movie.title}`}
+      className="aspect-2/3 w-full object-cover"
+    />
+  ) : (
+    <div className="-mt-(--card-spacing) flex aspect-2/3 w-full flex-col items-center justify-center gap-2 bg-muted text-muted-foreground">
+      <ImageOff />
+      <span className="text-sm">No poster available</span>
     </div>
+  )}
+
+  <CardHeader>
+    <CardTitle className="text-xl">{movie.title}</CardTitle>
+    {movie.date && (
+          <CardAction>
+            <Badge variant="secondary">{movie.date.slice(0, 4)}</Badge>
+          </CardAction>
+        )}
+      </CardHeader>
+
+      <CardContent>
+        <p className="leading-relaxed text-muted-foreground">{movie.overview}</p>
+      </CardContent>
+    </Card>
+      )}
+    </main>
   );
 }
