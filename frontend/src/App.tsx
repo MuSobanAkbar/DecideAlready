@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Shuffle } from "lucide-react";
+import { AlertCircle, Shuffle } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 import { Badge } from "@/components/ui/badge";
 import { ImageOff } from "lucide-react";
@@ -66,7 +66,16 @@ export default function App() {
         {isLoading ? <Spinner data-icon="inline-start" /> : <Shuffle data-icon="inline-start" />}
         {isLoading ? "Picking..." : "Pick a film"}
       </Button>
-      {movie && (
+    {isLoading ? (
+      <MovieCardSkeleton />
+    ) : error ? (
+      <Alert variant="destructive" className="w-full max-w-sm">
+        <AlertCircle />
+        <AlertTitle>Something went wrong</AlertTitle>
+        <AlertDescription>{error}</AlertDescription>
+      </Alert>
+    ) : movie ? (
+      
 <Card className="w-full max-w-sm">
   {movie.poster_path ? (
     <img
@@ -94,7 +103,7 @@ export default function App() {
         <p className="leading-relaxed text-muted-foreground">{movie.overview}</p>
       </CardContent>
     </Card>
-      )}
+) : null}
     </main>
   );
 }
