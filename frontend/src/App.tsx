@@ -12,7 +12,7 @@ import { AlertCircle, Shuffle } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 import { Badge } from "@/components/ui/badge";
 import { ImageOff } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
+
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { MovieCardSkeleton } from "@/components/ui/MovieCardSkeleton";
 
