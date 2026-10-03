@@ -8,10 +8,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Shuffle } from "lucide-react";
+import { AlertCircle, Shuffle } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 import { Badge } from "@/components/ui/badge";
 import { ImageOff } from "lucide-react";
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { MovieCardSkeleton } from "@/components/ui/MovieCardSkeleton";
 
 interface MovieResponse
 {
@@ -25,22 +28,25 @@ export default function App() {
 
   const [movie, setMovie] = useState<MovieResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
- 
+  const [error, setError] = useState<string | null>(null);  
 
   async function fetchRandomMovie() {
     setIsLoading(true);
- 
+    setError(null); // Reset error state before fetching
     try {
 
       const response = await fetch("/api/random");
  
-
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const data: MovieResponse = await response.json();
  
       
       setMovie(data);
     } catch (error) {
       console.error("Failed to fetch movie:", error);
+      setError("Failed to fetch movie. Please try again.");
 
     } finally {
       setIsLoading(false);
@@ -60,7 +66,16 @@ export default function App() {
         {isLoading ? <Spinner data-icon="inline-start" /> : <Shuffle data-icon="inline-start" />}
         {isLoading ? "Picking..." : "Pick a film"}
       </Button>
-      {movie && (
+    {isLoading ? (
+      <MovieCardSkeleton />
+    ) : error ? (
+      <Alert variant="destructive" className="w-full max-w-sm">
+        <AlertCircle />
+        <AlertTitle>Something went wrong</AlertTitle>
+        <AlertDescription>{error}</AlertDescription>
+      </Alert>
+    ) : movie ? (
+      
 <Card className="w-full max-w-sm">
   {movie.poster_path ? (
     <img
@@ -88,7 +103,7 @@ export default function App() {
         <p className="leading-relaxed text-muted-foreground">{movie.overview}</p>
       </CardContent>
     </Card>
-      )}
+) : null}
     </main>
   );
 }
