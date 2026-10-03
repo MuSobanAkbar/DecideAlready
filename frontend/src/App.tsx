@@ -25,16 +25,18 @@ export default function App() {
 
   const [movie, setMovie] = useState<MovieResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
- 
+  const [error, setError] = useState<string | null>(null);  
 
   async function fetchRandomMovie() {
     setIsLoading(true);
- 
+    setError(null); // Reset error state before fetching
     try {
 
       const response = await fetch("/api/random");
  
-
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const data: MovieResponse = await response.json();
  
       
