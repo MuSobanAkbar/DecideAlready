@@ -1,18 +1,29 @@
 import { useState } from 'react'
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardAction,
+  CardContent,
 
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Shuffle } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
+import { Badge } from "@/components/ui/badge";
+import { ImageOff } from "lucide-react";
 
 interface MovieResponse
 {
     title: string;
     overview: string;
     date: string;
+    poster_path: string | null;
 }
 
 export default function App() {
 
-  const [movieTitle, setMovieTitle] = useState("");
-  const [movieOverview, setMovieOverview] = useState("");
-  const [movieDate, setMovieDate] = useState("");
+  const [movie, setMovie] = useState<MovieResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
  
 
@@ -26,13 +37,11 @@ export default function App() {
 
       const data: MovieResponse = await response.json();
  
-
-      setMovieTitle(data.title);
-      setMovieOverview(data.overview);
-      setMovieDate(data.date);
+      
+      setMovie(data);
     } catch (error) {
       console.error("Failed to fetch movie:", error);
-      setMovieTitle("Failed to load movie. Is the backend running?");
+
     } finally {
       setIsLoading(false);
     }
@@ -40,21 +49,46 @@ export default function App() {
  
 
   return (
-    <div style={{ textAlign: "center", marginTop: "50px", fontFamily: "sans-serif " }}>
-      <h1>Random Movie Picker</h1>
+    <main className="flex min-h-svh flex-col items-center gap-8 px-4 py-12">
+      <header className="flex flex-col items-center gap-2 text-center">
+  <h1 className="text-4xl font-bold tracking-tight">DecideAlready</h1>
+  <p className="text-muted-foreground">You can't pick a film? Let the button decide.</p>
+</header>
  
 
-      <button
-        onClick={fetchRandomMovie}
-        disabled={isLoading}
-        style={{ padding: "10px 20px", fontSize: "16px", cursor: "pointer" }}
-      >
-        {isLoading ? "Picking..." : "Get Random Movie"}
-      </button>
- 
-      {movieTitle && <h2 style={{ marginTop: "30px" }}>{movieTitle}</h2>}
-      {movieOverview && <p style={{ maxWidth: "600px", margin: "20px auto" }}>{movieOverview}</p>}
-      {movieDate && <p>Release Date: {movieDate}</p>}
+      <Button size="lg" onClick={fetchRandomMovie} disabled={isLoading}>
+        {isLoading ? <Spinner data-icon="inline-start" /> : <Shuffle data-icon="inline-start" />}
+        {isLoading ? "Picking..." : "Pick a film"}
+      </Button>
+      {movie && (
+<Card className="w-full max-w-sm">
+  {movie.poster_path ? (
+    <img
+      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+      alt={`Poster for ${movie.title}`}
+      className="aspect-2/3 w-full object-cover"
+    />
+  ) : (
+    <div className="-mt-(--card-spacing) flex aspect-2/3 w-full flex-col items-center justify-center gap-2 bg-muted text-muted-foreground">
+      <ImageOff />
+      <span className="text-sm">No poster available</span>
     </div>
+  )}
+
+  <CardHeader>
+    <CardTitle className="text-xl">{movie.title}</CardTitle>
+    {movie.date && (
+          <CardAction>
+            <Badge variant="secondary">{movie.date.slice(0, 4)}</Badge>
+          </CardAction>
+        )}
+      </CardHeader>
+
+      <CardContent>
+        <p className="leading-relaxed text-muted-foreground">{movie.overview}</p>
+      </CardContent>
+    </Card>
+      )}
+    </main>
   );
 }
