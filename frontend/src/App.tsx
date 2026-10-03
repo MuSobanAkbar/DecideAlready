@@ -60,6 +60,11 @@ export default function App() {
           <h2 style={{ marginTop: "30px" }}>{movie.title}</h2>
           <p style={{ maxWidth: "600px", margin: "20px auto" }}>{movie.overview}</p>
           <p>Release Date: {movie.date}</p>
+          <img
+            src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : ""}
+            alt={movie.title}
+            style={{ maxWidth: "300px", marginTop: "20px" }}
+          />
         </>
       )}
     </div>
