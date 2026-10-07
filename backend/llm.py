@@ -21,7 +21,7 @@ class LLMTimeout(LLMError):
 
 
 class LLMRateLimited(LLMError):
-    """We've used up our free requests for now."""
+    """We've used up our free requests for now..."""
 
 
 
