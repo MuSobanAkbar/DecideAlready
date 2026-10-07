@@ -1,5 +1,5 @@
 import os
-
+import groq
 from dotenv import load_dotenv
 from groq import AsyncGroq
 
@@ -12,7 +12,19 @@ client = AsyncGroq(
     max_retries=1,
     )
 
+class LLMError(Exception):
+    """The AI couldn't give us an answer."""
 
+
+class LLMTimeout(LLMError):
+    """The AI took too long."""
+
+
+class LLMRateLimited(LLMError):
+    """We've used up our free requests for now."""
+
+
+    
 async def complete(prompt: str) -> str:
     response = await client.chat.completions.create(
         model="openai/gpt-oss-120b",
