@@ -24,10 +24,18 @@ class LLMRateLimited(LLMError):
     """We've used up our free requests for now."""
 
 
-    
+
 async def complete(prompt: str) -> str:
-    response = await client.chat.completions.create(
-        model="openai/gpt-oss-120b",
-        messages=[{"role": "user", "content": prompt}],
-    )
+    try:
+        response = await client.chat.completions.create(
+            model="openai/gpt-oss-120b",
+            messages=[{"role": "user", "content": prompt}],
+        )
+    except groq.APITimeoutError as e:
+        raise LLMTimeout("Groq took too long to answer") from e
+    except groq.RateLimitError as e:
+        raise LLMRateLimited("Groq rate limit reached") from e
+    except groq.APIError as e:
+        raise LLMError(f"Groq error: {e}") from e
+
     return response.choices[0].message.content
