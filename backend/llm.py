@@ -1,5 +1,9 @@
 import os
+
+from dotenv import load_dotenv
 from groq import AsyncGroq
+
+load_dotenv() 
 
 client = AsyncGroq(
     
