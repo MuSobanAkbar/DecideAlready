@@ -1,7 +1,12 @@
 import os
 from groq import AsyncGroq
 
-client = AsyncGroq(api_key=os.environ["GROQ_API_KEY"])
+client = AsyncGroq(
+    
+    api_key=os.environ["GROQ_API_KEY"],
+    timeout=10,
+    max_retries=1,
+    )
 
 
 async def complete(prompt: str) -> str:
