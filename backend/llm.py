@@ -7,11 +7,13 @@ from functools import lru_cache
 
 load_dotenv() 
 
-client = AsyncGroq(
-    
-    api_key=os.environ["GROQ_API_KEY"],
-    timeout=10,
-    max_retries=1,
+
+@lru_cache(maxsize=1)
+def get_client() -> AsyncGroq:
+    return AsyncGroq(
+        api_key=os.environ["GROQ_API_KEY"],
+        timeout=10,
+        max_retries=1,
     )
 
 class LLMError(Exception):
