@@ -2,9 +2,9 @@ from types import SimpleNamespace
 
 import groq
 import httpx
+import llm
 import pytest
 
-import llm
 
 # time out test
 @pytest.mark.anyio

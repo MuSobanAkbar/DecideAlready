@@ -1,9 +1,9 @@
 import os
+from functools import lru_cache
+
 import groq
 from dotenv import load_dotenv
 from groq import AsyncGroq
-from functools import lru_cache
-
 
 load_dotenv() 
 
