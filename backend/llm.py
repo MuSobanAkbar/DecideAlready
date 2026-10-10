@@ -7,7 +7,6 @@ from functools import lru_cache
 
 load_dotenv() 
 
-
 @lru_cache(maxsize=1)
 def get_client() -> AsyncGroq:
     return AsyncGroq(
@@ -31,7 +30,7 @@ class LLMRateLimited(LLMError):
 
 async def complete(prompt: str) -> str:
     try:
-        response = await client.chat.completions.create(
+        response = await get_client().chat.completions.create(
             model="openai/gpt-oss-120b",
             messages=[{"role": "user", "content": prompt}],
         )
