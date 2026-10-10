@@ -41,4 +41,11 @@ async def complete(prompt: str) -> str:
     except groq.APIError as e:
         raise LLMError(f"Groq error: {e}") from e
 
-    return response.choices[0].message.content
+
+    choice = response.choices[0]
+    text = (choice.message.content or "").strip()
+    #  this is from groq doc and it is a signal for if the model ran out of room
+    if choice.finish_reason == "length" or not text:
+        raise LLMError("Groq returned an empty or cut-off answer")
+
+    return text
