@@ -19,10 +19,12 @@ jobs:
           python-version: "3.12"
       - name: Backend Tests
         working-directory: ./backend
+        env:
+          TMDB_API_KEY: test-key
         run: |
           pip install -r requirements.txt pytest
           pytest -v
-          
+
       - name: Check Python with ruff
         run: |
           python3 -m pip install --upgrade pip
