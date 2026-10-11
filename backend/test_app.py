@@ -1,8 +1,7 @@
 from unittest.mock import MagicMock, patch
 
+from app import app
 from fastapi.testclient import TestClient
-
-from backend.app import app
 
 client = TestClient(app)
 
@@ -12,7 +11,7 @@ def test_health_check():
     assert response.json() == {"status": "ok"}
 
 
-@patch("backend.app.requests.get")
+@patch("app.requests.get")
 def test_get_random_movie(mock_get):
     fake_response = MagicMock()
     fake_response.status_code = 200
