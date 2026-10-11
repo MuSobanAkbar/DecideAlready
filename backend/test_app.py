@@ -1,8 +1,7 @@
 from unittest.mock import MagicMock, patch
 
-from fastapi.testclient import TestClient
-
 from app import app
+from fastapi.testclient import TestClient
 
 client = TestClient(app)
 
