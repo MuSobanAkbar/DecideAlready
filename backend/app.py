@@ -1,6 +1,6 @@
 import os
 import random
-
+import httpx
 import requests
 from dotenv import load_dotenv
 from fastapi import FastAPI
@@ -26,6 +26,26 @@ API_KEY = os.getenv("TMDB_API_KEY")
 if not API_KEY:
     raise ValueError("TMDB_API_KEY is not set in the environment variables, please set it in the .env file.")
 
+async def get_movie_details(movie_id: int) -> dict | None:
+    async with httpx.AsyncClient(timeout=5.0) as client:
+        response = await client.get(
+            f"https://api.themoviedb.org/3/movie/{movie_id}",
+            params={"api_key": API_KEY},
+        )
+
+    if response.status_code == 404:
+        return None
+
+    response.raise_for_status()
+    return response.json()
+
+
+
+class OverviewResponse(BaseModel):
+    movie_id: int
+    overview: str
+
+overview_cache: dict[tuple[int, str], str] = {}
 
 @app.get("/api/health")
 def health_check():
