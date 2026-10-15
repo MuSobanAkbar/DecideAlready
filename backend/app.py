@@ -1,11 +1,15 @@
 import os
 import random
 
+import httpx
+import llm
 import requests
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from prompts import PROMPT_VERSION, build_overview_prompt
+from pydantic import BaseModel
 
 load_dotenv()
 
@@ -26,12 +30,67 @@ API_KEY = os.getenv("TMDB_API_KEY")
 if not API_KEY:
     raise ValueError("TMDB_API_KEY is not set in the environment variables, please set it in the .env file.")
 
+async def get_movie_details(movie_id: int) -> dict | None:
+    async with httpx.AsyncClient(timeout=5.0) as client:
+        response = await client.get(
+            f"https://api.themoviedb.org/3/movie/{movie_id}",
+            params={"api_key": API_KEY},
+        )
+
+    if response.status_code == 404:
+        return None
+
+    response.raise_for_status()
+    return response.json()
+
+
+
+class OverviewResponse(BaseModel):
+    movie_id: int
+    overview: str
+
+overview_cache: dict[tuple[int, str], str] = {}
 
 @app.get("/api/health")
 def health_check():
     return {"status":"ok"}
 
-# out of the 500 pages, select a random one
+@app.get("/api/overview/{movie_id}", response_model=OverviewResponse)
+async def get_overview(movie_id: int):
+   
+    cache_key = (movie_id, PROMPT_VERSION)
+    if cache_key in overview_cache:
+        return OverviewResponse(movie_id=movie_id, overview=overview_cache[cache_key])
+
+
+    try:
+        details = await get_movie_details(movie_id)
+    except httpx.HTTPError:
+        raise HTTPException(502, "Couldn't reach the film database.")
+
+    if details is None:
+        raise HTTPException(404, "Film not found")
+
+    synopsis = details.get("overview") or ""
+    if not synopsis:
+        raise HTTPException(404, "This film has no synopsis to work from")
+
+
+    prompt = build_overview_prompt(details["title"], synopsis)
+
+    try:
+        text = await llm.complete(prompt)
+    except llm.LLMTimeout:
+        raise HTTPException(504, "The AI took too long. Try again.")
+    except llm.LLMRateLimited:
+        raise HTTPException(503, "Too many requests right now. Try again shortly.")
+    except llm.LLMError:
+        raise HTTPException(502, "The AI service had a problem.")
+
+
+    overview_cache[cache_key] = text
+    return OverviewResponse(movie_id=movie_id, overview=text)
+
 @app.get("/api/random")
 def get_random_movie():
     random_page = random.randint(1, 500)
