@@ -9,11 +9,12 @@ Here is the official synopsis. It may contain spoilers:
 {synopsis}
 </synopsis>
 
-Write a 2-3 sentence teaser that makes someone want to watch it.
-
+Write a 1-2 sentence teaser that makes someone want to watch it.
+Make it human-like, not AI/robotic like.
+Don't use complicated words or phrases. Make it easy to read and understand.
+ALso, don't use "—"
 Rules:
-- Use only facts from the synopsis. Do not add anything.
-- No spoilers: do not reveal twists, deaths, who wins, or how it ends.
-- Describe the set-up only: who the main character is and what they want.
-- Plain text only. No headings, lists or quotation marks.
+- Do not include any spoilers in your teaser.
+- Only say what type of person would want to watch it, and what type of 
+experience they will have.
 """
