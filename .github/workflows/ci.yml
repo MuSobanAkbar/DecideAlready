@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Backend Tests
-        working-directory: ./backend
+        working-directory: ./bho ackend
         env:
           TMDB_API_KEY: test-key
         run: |

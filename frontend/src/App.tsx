@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { OverviewBox } from "@/components/ui/OverviewBox";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,6 +13,7 @@ import { AlertCircle, Shuffle } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 import { Badge } from "@/components/ui/badge";
 import { ImageOff } from "lucide-react";
+import { SpoilerText } from "@/components/ui/SpoilerText";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { MovieCardSkeleton } from "@/components/ui/MovieCardSkeleton";
@@ -100,9 +102,10 @@ export default function App() {
         )}
       </CardHeader>
 
-      <CardContent>
-        <p className="leading-relaxed text-muted-foreground">{movie.overview}</p>
-      </CardContent>
+    <CardContent className="flex flex-col gap-4">
+      <OverviewBox key={movie.id} movieId={movie.id} />
+      {movie.overview && <SpoilerText key={movie.id} text={movie.overview} />}
+    </CardContent>
     </Card>
 ) : null}
     </main>
