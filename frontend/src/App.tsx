@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { OverviewBox } from "@/components/OverviewBox";
+import { OverviewBox } from "@/components/ui/OverviewBox";
 import { Button } from "@/components/ui/button";
 import {
   Card,
