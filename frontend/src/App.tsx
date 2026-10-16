@@ -101,8 +101,9 @@ export default function App() {
         )}
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="flex flex-col gap-3">
         <p className="leading-relaxed text-muted-foreground">{movie.overview}</p>
+        <OverviewBox key={movie.id} movieId={movie.id} />
       </CardContent>
     </Card>
 ) : null}
