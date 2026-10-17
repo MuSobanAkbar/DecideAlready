@@ -1,13 +1,12 @@
 import os
 import random
-from fastapi import Depends
 
-from auth import get_current_user_id
 import httpx
 import llm
 import requests
+from auth import get_current_user_id
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from prompts import PROMPT_VERSION, build_overview_prompt
