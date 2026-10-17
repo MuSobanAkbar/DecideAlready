@@ -1,6 +1,8 @@
 import os
 import random
+from fastapi import Depends
 
+from auth import get_current_user_id
 import httpx
 import llm
 import requests
@@ -120,6 +122,8 @@ def get_random_movie():
 
     else:
         print(f"Error fetching data: {response.status_code}")
-
+@app.get("/api/me")
+def me(user_id: str = Depends(get_current_user_id)):
+    return {"user_id": user_id}
 if os.path.exists("frontend/dist"):
   app.mount("/", StaticFiles(directory="frontend/dist", html=True), name="static")
