@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" shape-rendering="crispEdges">
+  <!-- 3D Button Base / Bevel -->
+  <rect x="0" y="2" width="16" height="14" rx="3" fill="#881337" />
+  <!-- Main Button Face -->
+  <rect x="0" y="0" width="16" height="14" rx="3" fill="#E11D48" />
+  <!-- Top Highlight -->
+  <rect x="2" y="1" width="12" height="1" fill="#FB7185" />
+  <!-- Pixel-Snapped 'D' (x: 2..7, y: 3..11) -->
+  <path fill="#FFFFFF" fill-rule="evenodd" d="
+    M2 3 H6 V4 H7 V10 H6 V11 H2 Z
+    M4 5 V9 H5 V5 Z
+  " />
+  <!-- Pixel-Snapped 'A' (x: 9..14, y: 3..11) -->
+  <path fill="#FFFFFF" fill-rule="evenodd" d="
+    M10 3 H13 V4 H14 V11 H12 V8 H11 V11 H9 V4 H10 Z
+    M11 5 V6 H12 V5 Z
+  " />
+</svg>
