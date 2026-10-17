@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/lib/supabase";
+import { authFetch } from "@/lib/api";
 export function AuthBar() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [email, setEmail] = useState("");
@@ -33,13 +34,32 @@ export function AuthBar() {
     return (
       <div className="flex items-center gap-3 text-sm">
         <span className="text-muted-foreground">Signed in as {userEmail}</span>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={async () => {
+            const response = await authFetch("/api/me");
+            alert(JSON.stringify(await response.json()));
+          }}
+        >
+          Who am I?
+        </Button>
         <Button variant="outline" size="sm" onClick={() => supabase.auth.signOut()}>
           Sign out
         </Button>
       </div>
     );
   }
-
+<Button
+  variant="ghost"
+  size="sm"
+  onClick={async () => {
+    const response = await authFetch("/api/me");
+    alert(JSON.stringify(await response.json()));
+  }}
+>
+  Who am I?
+</Button>
   if (sent) {
     return <p className="text-sm text-muted-foreground">Check your email for the sign-in link.</p>;
   }
