@@ -17,7 +17,7 @@ import { SpoilerText } from "@/components/ui/SpoilerText";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { MovieCardSkeleton } from "@/components/ui/MovieCardSkeleton";
-
+import { AuthBar } from "@/components/ui/AuthBar";
 interface MovieResponse
 {
     title: string;
@@ -62,6 +62,7 @@ export default function App() {
       <header className="flex flex-col items-center gap-2 text-center">
   <h1 className="text-4xl font-bold tracking-tight">DecideAlready</h1>
   <p className="text-muted-foreground">You can't pick a film? Let the button decide.</p>
+  <AuthBar />
 </header>
  
 
