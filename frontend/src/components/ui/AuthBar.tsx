@@ -1,0 +1,61 @@
+import { useEffect, useState, type FormEvent } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { supabase } from "@/lib/supabase";
+export function AuthBar() {
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [email, setEmail] = useState("");
+  const [sent, setSent] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUserEmail(session?.user.email ?? null);
+    });
+    return () => data.subscription.unsubscribe();
+  }, []);
+
+  async function sendLink(event: FormEvent) {
+    event.preventDefault();
+    setError(null);
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: { emailRedirectTo: window.location.origin },
+    });
+    if (error) {
+      setError(error.message);
+    } else {
+      setSent(true);
+    }
+  }
+
+  if (userEmail) {
+    return (
+      <div className="flex items-center gap-3 text-sm">
+        <span className="text-muted-foreground">Signed in as {userEmail}</span>
+        <Button variant="outline" size="sm" onClick={() => supabase.auth.signOut()}>
+          Sign out
+        </Button>
+      </div>
+    );
+  }
+
+  if (sent) {
+    return <p className="text-sm text-muted-foreground">Check your email for the sign-in link.</p>;
+  }
+
+  return (
+    <form onSubmit={sendLink} className="flex items-center gap-2">
+      <Input
+        type="email"
+        required
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="you@email.com"
+        className="w-56"
+      />
+      <Button type="submit" size="sm">Email me a link</Button>
+      {error && <p className="text-sm text-destructive">{error}</p>}
+    </form>
+  );
+}
