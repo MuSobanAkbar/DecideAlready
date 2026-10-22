@@ -1,20 +1,17 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
+import { useSession } from "@/hooks/useSession";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/lib/supabase";
 import { authFetch } from "@/lib/api";
 export function AuthBar() {
-  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const session = useSession();
+  const userEmail = session?.user.email ?? null;
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUserEmail(session?.user.email ?? null);
-    });
-    return () => data.subscription.unsubscribe();
-  }, []);
+
 
   async function sendLink(event: FormEvent) {
     event.preventDefault();
