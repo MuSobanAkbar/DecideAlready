@@ -5,3 +5,4 @@ python-dotenv
 httpx
 groq
 PyJWT[crypto]==2.10.1
+supabase==2.33.0
