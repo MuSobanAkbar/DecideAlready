@@ -1,19 +1,18 @@
 import os
 import random
 
+import db
 import httpx
+import llm
 import requests
+from auth import get_current_user_id
 from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel
-
-import db
-import llm
-from auth import get_current_user_id
 from prompts import PROMPT_VERSION, build_overview_prompt
+from pydantic import BaseModel
 
 load_dotenv()
 
