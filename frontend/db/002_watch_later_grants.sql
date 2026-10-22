@@ -1,0 +1,1 @@
+grant select, insert, delete, update on public.watch_later to service_role; -- this is the role that the frontend uses to access the database
