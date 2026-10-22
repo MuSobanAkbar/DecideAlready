@@ -1,6 +1,6 @@
 import os
 import random
-
+import db
 import httpx
 import llm
 import requests
@@ -11,6 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from prompts import PROMPT_VERSION, build_overview_prompt
 from pydantic import BaseModel
+from fastapi.concurrency import run_in_threadpool
 
 load_dotenv()
 
@@ -92,6 +93,9 @@ async def get_overview(movie_id: int):
     overview_cache[cache_key] = text
     return OverviewResponse(movie_id=movie_id, overview=text)
 
+class SaveFilmRequest(BaseModel):
+    tmdb_id: int
+
 @app.get("/api/random")
 def get_random_movie():
     random_page = random.randint(1, 500)
@@ -121,8 +125,35 @@ def get_random_movie():
 
     else:
         print(f"Error fetching data: {response.status_code}")
+
+@app.post("/api/watch-later")
+async def save_to_watch_later(
+    body: SaveFilmRequest,
+    user_id: str = Depends(get_current_user_id),
+):
+    try:
+        details = await get_movie_details(body.tmdb_id)
+    except httpx.HTTPError:
+        raise HTTPException(502, "Couldn't reach the film database.")
+
+    if details is None:
+        raise HTTPException(404, "Film not found")
+
+    await run_in_threadpool(
+        db.add_to_watch_later,
+        user_id,
+        body.tmdb_id,
+        details["title"],
+        details.get("poster_path"),
+    )
+
+    return {"saved": True, "tmdb_id": body.tmdb_id}
+
 @app.get("/api/me")
 def me(user_id: str = Depends(get_current_user_id)):
     return {"user_id": user_id}
+
+
+
 if os.path.exists("frontend/dist"):
   app.mount("/", StaticFiles(directory="frontend/dist", html=True), name="static")
