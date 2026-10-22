@@ -5,7 +5,7 @@ import {
   Card,
   CardAction,
   CardContent,
-
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -14,10 +14,12 @@ import { Spinner } from "@/components/ui/spinner";
 import { Badge } from "@/components/ui/badge";
 import { ImageOff } from "lucide-react";
 import { SpoilerText } from "@/components/ui/SpoilerText";
-
+import { WatchLaterButton } from "@/components/WatchLaterButton";
+import { useSession } from "@/hooks/useSession";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { MovieCardSkeleton } from "@/components/ui/MovieCardSkeleton";
 import { AuthBar } from "@/components/ui/AuthBar";
+
 interface MovieResponse
 {
     title: string;
@@ -32,7 +34,7 @@ export default function App() {
   const [movie, setMovie] = useState<MovieResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);  
-
+  const session = useSession();
   async function fetchRandomMovie() {
     setIsLoading(true);
     setError(null); // Reset error state before fetching
@@ -107,6 +109,11 @@ export default function App() {
       <OverviewBox key={movie.id} movieId={movie.id} />
       {movie.overview && <SpoilerText key={movie.id} text={movie.overview} />}
     </CardContent>
+          {session && ( // only if signed in "session &&"
+            <CardFooter>
+              <WatchLaterButton key={movie.id} tmdbId={movie.id} />
+            </CardFooter>
+          )}
     </Card>
 ) : null}
     </main>
