@@ -31,13 +31,14 @@ def add_to_watch_later(user_id: str, tmdb_id: int, title: str, poster_path: str 
     (
         get_client()
         .table(TABLE)
-        .upsert(
+        .upsert( # upsert is used to avoid duplicates, if the row already exists it will be updated
             {"user_id": user_id, "tmdb_id": tmdb_id, "title": title, "poster_path": poster_path},
             on_conflict="user_id,tmdb_id",
             ignore_duplicates=True,
         )
         .execute()
     )
+
 def list_watch_later(user_id: str) -> list[dict]:
     response = (
         get_client()
@@ -48,3 +49,13 @@ def list_watch_later(user_id: str) -> list[dict]:
         .execute()
     )
     return response.data
+
+def remove_from_watch_later(user_id: str, tmdb_id: int) -> None:
+    (
+        get_client()
+        .table(TABLE)
+        .delete()
+        .eq("user_id", user_id)
+        .eq("tmdb_id", tmdb_id)
+        .execute()
+    )
