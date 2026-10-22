@@ -31,3 +31,8 @@ def get_current_user_id(authorization: str | None = Header(default=None)) -> str
         raise HTTPException(401, "Your sign-in has expired. Please sign in again.")
 
     return claims["sub"]
+
+def get_optional_user_id(authorization: str | None = Header(default=None)) -> str | None:
+    if not authorization:
+        return None
+    return get_current_user_id(authorization)

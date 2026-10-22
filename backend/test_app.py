@@ -19,7 +19,8 @@ def test_get_random_movie(mock_get):
         "results": [{
             "title": "fake Movie",
             "overview": "this is a fake movie for testing.",
-            "release_date": "2026-01-01"
+            "release_date": "2026-01-01",
+            "id": 1,
         }
         ]
     }
