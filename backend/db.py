@@ -17,3 +17,12 @@ def get_client() -> Client:
         os.environ["SUPABASE_URL"],
         os.environ["SUPABASE_SECRET_KEY"],
     )
+def saved_tmdb_ids(user_id: str) -> set[int]:
+    response = (
+        get_client()
+        .table(TABLE)
+        .select("tmdb_id")
+        .eq("user_id", user_id)
+        .execute()
+    )
+    return {row["tmdb_id"] for row in response.data}
