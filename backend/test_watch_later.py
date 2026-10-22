@@ -1,9 +1,8 @@
-import pytest
-from fastapi.testclient import TestClient
-
 import app as main
 import db
+import pytest
 from auth import get_current_user_id
+from fastapi.testclient import TestClient
 
 client = TestClient(main.app)
 

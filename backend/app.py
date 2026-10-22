@@ -1,18 +1,18 @@
 import os
 import random
-
-import db
+from auth import get_current_user_id, get_optional_user_id
 import httpx
-import llm
 import requests
-from auth import get_current_user_id
 from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from prompts import PROMPT_VERSION, build_overview_prompt
 from pydantic import BaseModel
+import db
+import llm
+from auth import get_current_user_id, get_optional_user_id
+from prompts import PROMPT_VERSION, build_overview_prompt
 
 load_dotenv()
 
@@ -98,7 +98,8 @@ class SaveFilmRequest(BaseModel):
     tmdb_id: int
 
 @app.get("/api/random")
-def get_random_movie():
+def get_random_movie(user_id: str | None = Depends(get_optional_user_id)):
+    saved = db.saved_tmdb_ids(user_id) if user_id else set()
     random_page = random.randint(1, 500)
 
     url = "https://api.themoviedb.org/3/discover/movie"
@@ -115,6 +116,8 @@ def get_random_movie():
     if response.status_code == 200:
         data = response.json()  
         movie_list = data.get("results", [])
+        movie_list = [movie for movie in movie_list if movie["id"] not in saved]
+
 
     if movie_list:
         movie = random.choice(movie_list)  # pick random movie from list.
