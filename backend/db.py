@@ -38,3 +38,13 @@ def add_to_watch_later(user_id: str, tmdb_id: int, title: str, poster_path: str 
         )
         .execute()
     )
+def list_watch_later(user_id: str) -> list[dict]:
+    response = (
+        get_client()
+        .table(TABLE)
+        .select("tmdb_id, title, poster_path, added_at")
+        .eq("user_id", user_id)
+        .order("added_at", desc=True)
+        .execute()
+    )
+    return response.data
