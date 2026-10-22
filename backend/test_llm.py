@@ -2,9 +2,8 @@ from types import SimpleNamespace
 
 import groq
 import httpx
-import pytest
-
 import llm
+import pytest
 
 
 # time out test
