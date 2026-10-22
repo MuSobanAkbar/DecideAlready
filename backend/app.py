@@ -92,6 +92,9 @@ async def get_overview(movie_id: int):
     overview_cache[cache_key] = text
     return OverviewResponse(movie_id=movie_id, overview=text)
 
+class SaveFilmRequest(BaseModel):
+    tmdb_id: int
+    
 @app.get("/api/random")
 def get_random_movie():
     random_page = random.randint(1, 500)
