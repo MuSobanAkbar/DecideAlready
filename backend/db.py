@@ -26,3 +26,15 @@ def saved_tmdb_ids(user_id: str) -> set[int]:
         .execute()
     )
     return {row["tmdb_id"] for row in response.data}
+
+def add_to_watch_later(user_id: str, tmdb_id: int, title: str, poster_path: str | None) -> None:
+    (
+        get_client()
+        .table(TABLE)
+        .upsert(
+            {"user_id": user_id, "tmdb_id": tmdb_id, "title": title, "poster_path": poster_path},
+            on_conflict="user_id,tmdb_id",
+            ignore_duplicates=True,
+        )
+        .execute()
+    )
