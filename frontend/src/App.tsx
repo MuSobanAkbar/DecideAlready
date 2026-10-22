@@ -19,7 +19,7 @@ import { useSession } from "@/hooks/useSession";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { MovieCardSkeleton } from "@/components/ui/MovieCardSkeleton";
 import { AuthBar } from "@/components/ui/AuthBar";
-
+import { authFetch } from "@/lib/api";
 interface MovieResponse
 {
     title: string;
@@ -40,7 +40,7 @@ export default function App() {
     setError(null); // Reset error state before fetching
     try {
 
-      const response = await fetch("/api/random");
+      const response = await authFetch("/api/random");
  
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
